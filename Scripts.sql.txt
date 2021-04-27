@@ -1,0 +1,65 @@
+CREATE TABLE basesj(
+	id bigint primary key,
+	dic bigint,
+	inscricao bigint,
+	proprietario varchar (255),
+	fator varchar (100),
+	tipo varchar (100),
+	area float,
+	vlr_total float,
+	vlr_individual float,
+	dic_principal bigint
+);
+
+
+SET client_encoding = WIN1252;
+
+COPY basesj
+(
+    id,
+    dic,
+	inscricao,
+    proprietario,
+	fator,
+	tipo,
+	area,
+	vlr_total,
+	vlr_individual,
+	dic_principal
+)
+FROM 'C:\Temp\PlanilhaBaseSJ.csv'
+DELIMITER ';'
+CSV HEADER;
+
+SET client_encoding = UTF8;
+
+select * from basesj;
+
+select concat(
+	LPAD(matricula,6,'0'),
+	LPAD(he_50,5,'0'),
+	LPAD(he_100,5,'0'),
+	LPAD(hj_atestado,5,'0'),
+	LPAD(hj_acidente,5,'0'),
+	LPAD(ha_not,5,'0'),
+	LPAD(h_sobreaviso,5,'0'),
+	LPAD(f_normal,5,'0'),
+	LPAD(f_horas,5,'0'),
+	LPAD(d_repouso,5,'0'))
+from benner;
+
+update benner
+set conversor = concat(
+	LPAD(matricula,6,'0'),
+	LPAD(he_50,5,'0'),
+	LPAD(he_100,5,'0'),
+	LPAD(hj_atestado,5,'0'),
+	LPAD(hj_acidente,5,'0'),
+	LPAD(ha_not,5,'0'),
+	LPAD(h_sobreaviso,5,'0'),
+	LPAD(f_normal,5,'0'),
+	LPAD(f_horas,5,'0'),
+	LPAD(d_repouso,5,'0'));
+
+
+copy (select conversor from benner where conversor != '000000000000000000000000000000000000000000000000000')  to 'C:/temp/convertido.txt';
